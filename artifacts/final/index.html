@@ -1,0 +1,2292 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="성수동 반나절 탐방: 벽돌골목에서 서울숲까지 — 인더스트리얼 감성의 맛집·카페·복합문화공간 4곳 큐레이션">
+  <title>성수동 — 동네 탐방 로컬 여행 블로그</title>
+
+  <!-- 폰트 CDN: Fraunces · Manrope · IBM Plex Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;1,9..144,300&family=IBM+Plex+Mono:wght@400;500&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!--
+    네이버 지도 SDK
+    [사용자 게이트 G1] NCP 콘솔(https://console.ncloud.com/)에서 발급한 Client ID로
+    아래 YOUR_CLIENT_ID를 교체하세요.
+    - 신버전 키: ncpKeyId=발급받은_CLIENT_ID
+    - 구버전 키: ncpKeyId를 ncpClientId로 변경
+    [사용자 게이트 G2] NCP 콘솔 > 앱 > 서비스 환경 > 웹 서비스 URL에
+    http://localhost:8000 을 등록한 뒤 정적 서버로 여세요 (file:// 불가).
+  -->
+  <script
+    src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=i0wcwq70i3"
+    onerror="window.__NMAP_FAILED=true"
+  ></script>
+
+  <style>
+    /* =====================================================
+       DESIGN TOKENS — :root 커스텀 프로퍼티
+       출처: artifacts/design/design-tokens.md
+    ===================================================== */
+    :root {
+      /* COLOR — Warm Neutral 5단 */
+      --color-neutral-50:  #FAF9F6;
+      --color-neutral-100: #EDEAE3;
+      --color-neutral-300: #C9C4BA;
+      --color-neutral-500: #6B6760;
+      --color-neutral-900: #1C1A17;
+
+      /* COLOR — Primary (잉크 블루) */
+      --color-primary:        #2B3A55;
+      --color-primary-light:  #3D5278;
+      --color-primary-subtle: #D6DCE8;
+
+      /* COLOR — 태그 3색 */
+      --color-tag-food-bg:   #E8E0D8;
+      --color-tag-food-fg:   #3D2B1F;
+      --color-tag-food-border: #C9BFB4;
+
+      --color-tag-cafe-bg:   #DDE2D8;
+      --color-tag-cafe-fg:   #1F2D1C;
+      --color-tag-cafe-border: #B8C4B4;
+
+      --color-tag-space-bg:  #D6DCE8;
+      --color-tag-space-fg:  #1A2540;
+      --color-tag-space-border: #B0BBC8;
+
+      --color-tag-active-bg:  #2B3A55;
+      --color-tag-active-fg:  #FAF9F6;
+
+      /* COLOR — 시맨틱 */
+      --color-surface:         var(--color-neutral-50);
+      --color-surface-card:    var(--color-neutral-100);
+      --color-border:          var(--color-neutral-300);
+      --color-text-primary:    var(--color-neutral-900);
+      --color-text-secondary:  var(--color-neutral-500);
+      --color-text-caption:    var(--color-neutral-500);
+      --color-link:            var(--color-primary);
+      --color-link-hover:      var(--color-primary-light);
+      --color-fallback-bg:     var(--color-neutral-100);
+      --color-fallback-border: var(--color-neutral-300);
+
+      /* TYPOGRAPHY — 폰트 패밀리 */
+      --font-display: 'Fraunces', Georgia, serif;
+      --font-body:    'Manrope', system-ui, sans-serif;
+      --font-data:    'IBM Plex Mono', 'Courier New', monospace;
+
+      /* TYPOGRAPHY — 스케일 */
+      --font-size-xs:   0.75rem;
+      --font-size-sm:   0.875rem;
+      --font-size-md:   1rem;
+      --font-size-lg:   1.25rem;
+      --font-size-xl:   1.5rem;
+      --font-size-2xl:  2rem;
+      --font-size-3xl:  2.5rem;
+      --font-size-4xl:  3rem;
+
+      /* TYPOGRAPHY — 행간 */
+      --line-height-heading: 1.15;
+      --line-height-body:    1.6;
+      --line-height-tight:   1.25;
+      --line-height-data:    1.4;
+
+      /* TYPOGRAPHY — 자간 */
+      --letter-spacing-display: -0.02em;
+      --letter-spacing-body:     0em;
+      --letter-spacing-label:    0.04em;
+      --letter-spacing-data:     0.01em;
+
+      /* SPACING — 8배수 그리드 */
+      --space-1:   0.5rem;
+      --space-2:   1rem;
+      --space-3:   1.5rem;
+      --space-4:   2rem;
+      --space-5:   2.5rem;
+      --space-6:   3rem;
+      --space-8:   4rem;
+      --space-10:  5rem;
+      --space-12:  6rem;
+      --space-16:  8rem;
+
+      --space-card-pad:    var(--space-3);
+      --space-card-gap:    var(--space-2);
+      --space-section-gap: var(--space-8);
+      --space-hero-pad:    var(--space-10);
+      --touch-target:      2.75rem;
+
+      /* LAYOUT */
+      --grid-columns-mobile:  1;
+      --grid-columns-tablet:  2;
+      --grid-columns-desktop: 12;
+      --breakpoint-sm:  390px;
+      --breakpoint-md:  768px;
+      --breakpoint-lg: 1440px;
+      --split-content: 1fr;
+      --split-map:     1fr;
+      --max-width-text:    680px;
+      --max-width-content: 1200px;
+      --map-height-hero:   480px;
+      --map-height-split:  100vh;
+      --map-height-mini:   240px;
+      --tab-bar-height: 3.5rem;
+
+      /* BORDER RADIUS */
+      --radius-sm:   0.25rem;
+      --radius-md:   0.5rem;
+      --radius-lg:   1rem;
+      --radius-full: 9999px;
+
+      /* SHADOW */
+      --shadow-card:      0 1px 4px rgba(28,26,23,0.08), 0 4px 16px rgba(28,26,23,0.06);
+      --shadow-card-hover:0 2px 8px rgba(28,26,23,0.12), 0 8px 24px rgba(28,26,23,0.10);
+      --shadow-pin:       0 2px 6px rgba(28,26,23,0.24);
+      --shadow-panel:     0 4px 32px rgba(28,26,23,0.12);
+
+      /* MOTION */
+      --duration-fast:   200ms;
+      --duration-base:   250ms;
+      --duration-slow:   300ms;
+      --easing-default:  cubic-bezier(0.4,0,0.2,1);
+      --easing-enter:    cubic-bezier(0,0,0.2,1);
+      --easing-exit:     cubic-bezier(0.4,0,1,1);
+      --easing-pin:      cubic-bezier(0.34,1.2,0.64,1);
+      --scrollfade-duration: var(--duration-slow);
+      --scrollfade-easing:   var(--easing-enter);
+      --pin-hover-scale: 1.08;
+
+      /* MARKER 핀 토큰 */
+      --pin-size:        1.75rem;
+      --pin-font-size:   var(--font-size-xs);
+      --pin-font-family: var(--font-data);
+      --pin-food-bg:     var(--color-tag-food-bg);
+      --pin-food-fg:     var(--color-tag-food-fg);
+      --pin-cafe-bg:     var(--color-tag-cafe-bg);
+      --pin-cafe-fg:     var(--color-tag-cafe-fg);
+      --pin-space-bg:    var(--color-tag-space-bg);
+      --pin-space-fg:    var(--color-tag-space-fg);
+      --pin-active-bg:   var(--color-primary);
+      --pin-active-fg:   var(--color-neutral-50);
+      --pin-border-width: 2px;
+      --pin-border-color: rgba(255,255,255,0.85);
+
+      /* IMAGE */
+      --aspect-hero:  16/9;
+      --aspect-card:   4/3;
+      --aspect-thumb:  1/1;
+      --aspect-banner: 3/1;
+      --placeholder-bg:     var(--color-neutral-100);
+      --placeholder-border: var(--color-neutral-300);
+
+      /* Z-INDEX */
+      --z-base:    0;
+      --z-card:    10;
+      --z-map:     20;
+      --z-pin:     30;
+      --z-panel:   40;
+      --z-overlay: 50;
+      --z-modal:   60;
+      --z-tab:     70;
+    }
+
+    /* prefers-reduced-motion */
+    @media (prefers-reduced-motion: reduce) {
+      :root {
+        --duration-fast:       0ms;
+        --duration-base:       0ms;
+        --duration-slow:       0ms;
+        --scrollfade-duration: 0ms;
+        --pin-hover-scale:     1;
+      }
+      html { scroll-behavior: auto; }
+      .scroll-fade,
+      .scroll-pan {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+      }
+      .map-pin { transition: none !important; }
+      .map-pin:hover, .map-pin:focus { transform: none !important; }
+    }
+
+    /* =====================================================
+       RESET & BASE
+    ===================================================== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html {
+      font-size: 100%;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font-body);
+      font-size: var(--font-size-md);
+      line-height: var(--line-height-body);
+      color: var(--color-text-primary);
+      background: var(--color-surface);
+      min-height: 100dvh;
+      padding-bottom: var(--tab-bar-height);
+    }
+
+    img { display: block; max-width: 100%; height: auto; }
+    a { color: var(--color-link); text-decoration: underline; }
+    a:hover { color: var(--color-link-hover); }
+    button { cursor: pointer; border: none; background: none; font: inherit; }
+    ul, ol { list-style: none; }
+
+    /* =====================================================
+       SKIP LINK (접근성)
+    ===================================================== */
+    .skip-link {
+      position: absolute;
+      top: -100%;
+      left: var(--space-2);
+      padding: var(--space-1) var(--space-2);
+      background: var(--color-primary);
+      color: var(--color-neutral-50);
+      border-radius: var(--radius-sm);
+      font-family: var(--font-body);
+      font-size: var(--font-size-sm);
+      z-index: var(--z-modal);
+      transition: top var(--duration-fast) var(--easing-enter);
+    }
+    .skip-link:focus { top: var(--space-2); }
+
+    /* =====================================================
+       TYPOGRAPHY HELPERS
+    ===================================================== */
+    .display-title {
+      font-family: var(--font-display);
+      font-weight: 700;
+      letter-spacing: var(--letter-spacing-display);
+      line-height: var(--line-height-heading);
+    }
+    .section-heading {
+      font-family: var(--font-display);
+      font-size: var(--font-size-2xl);
+      font-weight: 600;
+      letter-spacing: var(--letter-spacing-display);
+      line-height: var(--line-height-heading);
+      color: var(--color-text-primary);
+    }
+    .body-text {
+      font-family: var(--font-body);
+      font-size: var(--font-size-md);
+      line-height: var(--line-height-body);
+      color: var(--color-text-primary);
+    }
+    .caption {
+      font-family: var(--font-data);
+      font-size: var(--font-size-xs);
+      color: var(--color-text-caption);
+      line-height: var(--line-height-data);
+      letter-spacing: var(--letter-spacing-data);
+    }
+
+    /* =====================================================
+       TAG BADGE
+    ===================================================== */
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-1);
+      padding: calc(var(--space-1) * 0.5) var(--space-1);
+      border-radius: var(--radius-sm);
+      font-family: var(--font-body);
+      font-size: var(--font-size-sm);
+      letter-spacing: var(--letter-spacing-label);
+      border: 1px solid transparent;
+      font-weight: 500;
+      white-space: nowrap;
+      transition:
+        background var(--duration-fast) var(--easing-default),
+        color var(--duration-fast) var(--easing-default);
+    }
+    .tag--food  { background: var(--color-tag-food-bg);  color: var(--color-tag-food-fg);  border-color: var(--color-tag-food-border); }
+    .tag--cafe  { background: var(--color-tag-cafe-bg);  color: var(--color-tag-cafe-fg);  border-color: var(--color-tag-cafe-border); }
+    .tag--space { background: var(--color-tag-space-bg); color: var(--color-tag-space-fg); border-color: var(--color-tag-space-border); }
+    .tag--neutral {
+      background: var(--color-neutral-100);
+      color: var(--color-neutral-500);
+      border-color: var(--color-neutral-300);
+    }
+    .tag--active,
+    .tag[aria-pressed="true"] {
+      background: var(--color-tag-active-bg);
+      color: var(--color-tag-active-fg);
+      border-color: var(--color-tag-active-bg);
+    }
+
+    /* =====================================================
+       MAP PIN (핀 마커)
+    ===================================================== */
+    .map-pin {
+      width: var(--pin-size);
+      height: var(--pin-size);
+      border-radius: var(--radius-full);
+      border: var(--pin-border-width) solid var(--pin-border-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--pin-font-family);
+      font-size: var(--pin-font-size);
+      font-weight: 500;
+      box-shadow: var(--shadow-pin);
+      cursor: pointer;
+      transition: transform var(--duration-base) var(--easing-pin);
+      user-select: none;
+      flex-shrink: 0;
+    }
+    .map-pin:hover,
+    .map-pin:focus { transform: scale(var(--pin-hover-scale)); outline: 2px solid var(--color-primary); outline-offset: 2px; }
+    .map-pin--food  { background: var(--pin-food-bg);  color: var(--pin-food-fg); }
+    .map-pin--cafe  { background: var(--pin-cafe-bg);  color: var(--pin-cafe-fg); }
+    .map-pin--space { background: var(--pin-space-bg); color: var(--pin-space-fg); }
+    .map-pin--active { background: var(--pin-active-bg); color: var(--pin-active-fg); }
+
+    /* =====================================================
+       PLACE CARD
+    ===================================================== */
+    .place-card {
+      background: var(--color-surface-card);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+      transition:
+        box-shadow var(--duration-base) var(--easing-default),
+        transform  var(--duration-base) var(--easing-default);
+      display: flex;
+      flex-direction: column;
+    }
+    .place-card:hover {
+      box-shadow: var(--shadow-card-hover);
+      transform: translateY(-2px);
+    }
+    .place-card.is-active {
+      outline: 2px solid var(--color-primary);
+      outline-offset: 2px;
+    }
+
+    .place-card__image {
+      aspect-ratio: var(--aspect-card);
+      background: var(--placeholder-bg);
+      border-bottom: 1px solid var(--placeholder-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .place-card__photo {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .place-card__image-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-1);
+      color: var(--color-neutral-300);
+    }
+    .place-card__image-placeholder svg { opacity: 0.5; }
+    .place-card__image-placeholder span {
+      font-family: var(--font-data);
+      font-size: var(--font-size-xs);
+      color: var(--color-neutral-300);
+    }
+
+    .place-card__body {
+      padding: var(--space-card-pad);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-1);
+      flex: 1;
+    }
+    .place-card__header {
+      display: flex;
+      align-items: center;
+      gap: var(--space-1);
+    }
+    .place-card__number {
+      font-family: var(--font-data);
+      font-size: var(--font-size-xs);
+      font-weight: 500;
+      border-radius: var(--radius-full);
+      width: var(--pin-size);
+      height: var(--pin-size);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      border: var(--pin-border-width) solid var(--pin-border-color);
+      box-shadow: var(--shadow-pin);
+    }
+    .place-card--food  .place-card__number { background: var(--pin-food-bg);  color: var(--pin-food-fg); }
+    .place-card--cafe  .place-card__number { background: var(--pin-cafe-bg);  color: var(--pin-cafe-fg); }
+    .place-card--space .place-card__number { background: var(--pin-space-bg); color: var(--pin-space-fg); }
+
+    .place-card__name {
+      font-family: var(--font-display);
+      font-size: var(--font-size-lg);
+      font-weight: 600;
+      line-height: var(--line-height-heading);
+      color: var(--color-text-primary);
+      letter-spacing: var(--letter-spacing-display);
+    }
+    .place-card__blurb {
+      font-family: var(--font-body);
+      font-size: var(--font-size-sm);
+      line-height: var(--line-height-body);
+      color: var(--color-text-secondary);
+      margin-top: var(--space-1);
+    }
+    .place-card__meta {
+      margin-top: var(--space-1);
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+    .place-card__address,
+    .place-card__date {
+      font-family: var(--font-data);
+      font-size: var(--font-size-xs);
+      color: var(--color-text-secondary);
+      line-height: var(--line-height-data);
+      letter-spacing: var(--letter-spacing-data);
+    }
+    .place-card__status {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      font-family: var(--font-data);
+      font-size: var(--font-size-xs);
+      color: var(--color-text-secondary);
+    }
+    .place-card__status::before {
+      content: '';
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #6B9E6A;
+      flex-shrink: 0;
+    }
+
+    /* =====================================================
+       LAYOUT — 컨테이너
+    ===================================================== */
+    .container {
+      width: 100%;
+      max-width: var(--max-width-content);
+      margin-inline: auto;
+      padding-inline: var(--space-2);
+    }
+
+    /* =====================================================
+       SITE HEADER
+    ===================================================== */
+    .site-header {
+      background: var(--color-surface);
+      border-bottom: 1px solid var(--color-border);
+      position: sticky;
+      top: 0;
+      z-index: var(--z-panel);
+      padding-block: var(--space-1);
+    }
+    .site-header__inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-2);
+    }
+    .site-header__logo {
+      font-family: var(--font-display);
+      font-size: var(--font-size-lg);
+      font-weight: 700;
+      color: var(--color-primary);
+      text-decoration: none;
+      letter-spacing: var(--letter-spacing-display);
+    }
+    .site-header__nav {
+      display: flex;
+      gap: var(--space-1);
+    }
+    .site-header__nav button {
+      padding: calc(var(--space-1) * 0.75) var(--space-2);
+      border-radius: var(--radius-sm);
+      font-family: var(--font-body);
+      font-size: var(--font-size-sm);
+      font-weight: 500;
+      color: var(--color-text-secondary);
+      transition: background var(--duration-fast) var(--easing-default), color var(--duration-fast) var(--easing-default);
+    }
+    .site-header__nav button:hover { background: var(--color-neutral-100); color: var(--color-text-primary); }
+    .site-header__nav button.is-active { background: var(--color-primary-subtle); color: var(--color-primary); }
+    @media (max-width: 767px) { .site-header__nav { display: none; } }
+
+    /* =====================================================
+       HERO SECTION
+    ===================================================== */
+    .hero {
+      background-color: var(--color-neutral-900);
+      background-image: url('assets/hero.png');
+      background-size: cover;
+      background-position: center;
+      color: var(--color-neutral-50);
+      padding-block: var(--space-hero-pad);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(43,58,85,0.72) 0%, rgba(28,26,23,0.86) 100%);
+      z-index: 1;
+    }
+    .hero__bg-texture {
+      position: absolute;
+      inset: 0;
+      background-image:
+        repeating-linear-gradient(0deg, transparent, transparent 60px, rgba(255,255,255,0.015) 60px, rgba(255,255,255,0.015) 61px),
+        repeating-linear-gradient(90deg, transparent, transparent 60px, rgba(255,255,255,0.015) 60px, rgba(255,255,255,0.015) 61px);
+      z-index: 0;
+    }
+    .hero__inner {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-4);
+    }
+    .hero__breadcrumb {
+      font-family: var(--font-data);
+      font-size: var(--font-size-xs);
+      color: rgba(250,249,246,0.6);
+      letter-spacing: var(--letter-spacing-label);
+      text-transform: uppercase;
+    }
+    .hero__breadcrumb span + span::before {
+      content: ' / ';
+      margin-inline: 0.25em;
+      opacity: 0.5;
+    }
+    .hero__title {
+      font-size: var(--font-size-4xl);
+      color: var(--color-neutral-50);
+    }
+    @media (max-width: 767px) { .hero__title { font-size: var(--font-size-3xl); } }
+    @media (max-width: 389px) { .hero__title { font-size: var(--font-size-2xl); } }
+
+    .hero__subtitle {
+      font-family: var(--font-body);
+      font-size: var(--font-size-xl);
+      font-weight: 300;
+      color: rgba(250,249,246,0.75);
+      line-height: var(--line-height-body);
+      max-width: 560px;
+    }
+    .hero__tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-1);
+    }
+    .hero__tags .tag--neutral {
+      background: rgba(250,249,246,0.12);
+      color: rgba(250,249,246,0.85);
+      border-color: rgba(250,249,246,0.2);
+    }
+
+    /* =====================================================
+       INTRO MAP (히어로 하단 지도 패널)
+    ===================================================== */
+    .intro-map-section {
+      background: var(--color-surface);
+      border-bottom: 1px solid var(--color-border);
+    }
+    .intro-map-section__inner {
+      padding-block: var(--space-6);
+    }
+    .intro-map-section__label {
+      font-family: var(--font-data);
+      font-size: var(--font-size-xs);
+      color: var(--color-text-secondary);
+      letter-spacing: var(--letter-spacing-label);
+      text-transform: uppercase;
+      margin-bottom: var(--space-2);
+    }
+    .intro-map-wrapper {
+      position: relative;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      border: 1px solid var(--color-border);
+    }
+    #hero-map {
+      width: 100%;
+      height: var(--map-height-hero);
+    }
+    #hero-map-fallback {
+      display: none;
+      width: 100%;
+      height: var(--map-height-hero);
+      background: var(--color-fallback-bg);
+      border: 1px dashed var(--color-fallback-border);
+      border-radius: var(--radius-md);
+      padding: var(--space-3);
+    }
+    #hero-map-fallback.is-visible { display: block; }
+    .map-fallback__notice {
+      font-family: var(--font-body);
+      font-size: var(--font-size-sm);
+      color: var(--color-text-secondary);
+      margin-bottom: var(--space-2);
+      padding: var(--space-2);
+      background: var(--color-neutral-50);
+      border-radius: var(--radius-sm);
+      border-left: 3px solid var(--color-neutral-300);
+    }
+    .map-fallback__list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-1);
+      padding: var(--space-2);
+    }
+    .map-fallback__item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-1);
+      padding: var(--space-1);
+      background: var(--color-neutral-50);
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--color-border);
+    }
+    .map-fallback__name {
+      font-family: var(--font-body);
+      font-size: var(--font-size-sm);
+      font-weight: 500;
+      color: var(--color-text-primary);
+    }
+    .map-fallback__address {
+      font-family: var(--font-data);
+      font-size: var(--font-size-xs);
+      color: var(--color-text-secondary);
+      margin-left: auto;
+    }
+
+    /* =====================================================
+       NEIGHBORHOOD INTRO
+    ===================================================== */
+    .neighborhood-intro {
+      padding-block: var(--space-8);
+      background: var(--color-surface);
+    }
+    .neighborhood-intro__grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--space-6);
+    }
+    @media (min-width: 768px) {
+      .neighborhood-intro__grid {
+        grid-template-columns: 1fr 1fr;
+        align-items: start;
+      }
+    }
+    .neighborhood-intro__eyebrow {
+      font-family: var(--font-data);
+      font-size: var(--font-size-xs);
+      color: var(--color-text-secondary);
+      letter-spacing: var(--letter-spacing-label);
+      text-transform: uppercase;
+      margin-bottom: var(--space-2);
+    }
+    .neighborhood-intro__heading {
+      font-size: var(--font-size-3xl);
+      margin-bottom: var(--space-3);
+    }
+    @media (max-width: 767px) { .neighborhood-intro__heading { font-size: var(--font-size-2xl); } }
+    .neighborhood-intro__body {
+      font-size: var(--font-size-md);
+      line-height: var(--line-height-body);
+      color: var(--color-text-primary);
+      max-width: var(--max-width-text);
+    }
+    .neighborhood-intro__stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-2);
+    }
+    .stat-block {
+      background: var(--color-surface-card);
+      border-radius: var(--radius-md);
+      padding: var(--space-3);
+      border: 1px solid var(--color-border);
+    }
+    .stat-block__value {
+      font-family: var(--font-display);
+      font-size: var(--font-size-2xl);
+      font-weight: 700;
+      color: var(--color-primary);
+      line-height: 1;
+    }
+    .stat-block__label {
+      font-family: var(--font-data);
+      font-size: var(--font-size-xs);
+      color: var(--color-text-secondary);
+      margin-top: var(--space-1);
+      letter-spacing: var(--letter-spacing-data);
+    }
+
+    /* =====================================================
+       SPLIT VIEW (에디토리얼 + 지도)
+    ===================================================== */
+    .split-view {
+      background: var(--color-surface);
+      border-top: 1px solid var(--color-border);
+      border-bottom: 1px solid var(--color-border);
+    }
+    .split-view__inner {
+      display: grid;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 768px) {
+      .split-view__inner {
+        grid-template-columns: var(--split-content) var(--split-map);
+        min-height: 600px;
+      }
+    }
+
+    /* 좌: 에디토리얼 글 */
+    .split-editorial {
+      padding: var(--space-6) var(--space-4);
+      max-width: var(--max-width-text);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-4);
+    }
+    @media (max-width: 767px) { .split-editorial { padding: var(--space-4) var(--space-2); } }
+
+    .editorial-eyebrow {
+      font-family: var(--font-data);
+      font-size: var(--font-size-xs);
+      color: var(--color-text-secondary);
+      letter-spacing: var(--letter-spacing-label);
+      text-transform: uppercase;
+    }
+    .editorial-title {
+      font-size: var(--font-size-2xl);
+    }
+    @media (max-width: 767px) { .editorial-title { font-size: var(--font-size-xl); } }
+    .editorial-body {
+      font-size: var(--font-size-md);
+      line-height: var(--line-height-body);
+      color: var(--color-text-primary);
+    }
+    .editorial-body p + p { margin-top: var(--space-3); }
+
+    .editorial-highlight {
+      border-left: 3px solid var(--color-primary);
+      padding-left: var(--space-3);
+      margin-block: var(--space-2);
+    }
+    .editorial-highlight p {
+      font-family: var(--font-display);
+      font-size: var(--font-size-lg);
+      font-weight: 300;
+      font-style: italic;
+      color: var(--color-primary);
+      line-height: var(--line-height-body);
+    }
+
+    .place-ref-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+    }
+    .place-ref {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-2);
+      padding: var(--space-2);
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--color-border);
+      background: var(--color-surface-card);
+      cursor: pointer;
+      transition: background var(--duration-fast) var(--easing-default);
+      /* button 요소로 사용 시 기본 스타일 정규화 (시각 동일 유지) */
+      width: 100%;
+      text-align: left;
+      font: inherit;
+      color: inherit;
+    }
+    .place-ref:hover { background: var(--color-neutral-100); }
+    .place-ref__info { flex: 1; min-width: 0; }
+    .place-ref__name {
+      font-family: var(--font-body);
+      font-size: var(--font-size-sm);
+      font-weight: 600;
+      color: var(--color-text-primary);
+    }
+    .place-ref__addr {
+      font-family: var(--font-data);
+      font-size: var(--font-size-xs);
+      color: var(--color-text-secondary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* 우: 지도 패널 */
+    .split-map {
+      position: relative;
+      background: var(--color-surface-card);
+      border-left: 1px solid var(--color-border);
+    }
+    @media (max-width: 767px) {
+      .split-map {
+        border-left: none;
+        border-top: 1px solid var(--color-border);
+      }
+    }
+    .split-map__sticky {
+      position: sticky;
+      top: 57px; /* site-header 높이 */
+    }
+    #split-map {
+      width: 100%;
+      height: 600px;
+    }
+    @media (max-width: 767px) {
+      #split-map { height: var(--map-height-mini); }
+      .split-map__sticky { position: static; }
+    }
+    #split-map-fallback {
+      display: none;
+      padding: var(--space-3);
+    }
+    #split-map-fallback.is-visible { display: block; }
+
+    /* =====================================================
+       MOBILE MINI MAP 토글
+    ===================================================== */
+    .mobile-map-toggle {
+      display: none;
+      width: 100%;
+      padding: var(--space-2) var(--space-2);
+      background: var(--color-primary-subtle);
+      border: none;
+      border-top: 1px solid var(--color-border);
+      border-bottom: 1px solid var(--color-border);
+      font-family: var(--font-body);
+      font-size: var(--font-size-sm);
+      font-weight: 600;
+      color: var(--color-primary);
+      text-align: left;
+      min-height: var(--touch-target);
+      cursor: pointer;
+      align-items: center;
+      gap: var(--space-1);
+    }
+    @media (max-width: 767px) { .mobile-map-toggle { display: flex; } }
+    .mobile-map-toggle__icon { transition: transform var(--duration-fast) var(--easing-default); }
+    .mobile-map-toggle[aria-expanded="false"] .mobile-map-toggle__icon { transform: rotate(-90deg); }
+
+    /* =====================================================
+       PLACES GRID
+    ===================================================== */
+    .places-section {
+      padding-block: var(--space-section-gap);
+      background: var(--color-surface);
+    }
+    .places-section__header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: var(--space-2);
+      margin-bottom: var(--space-4);
+    }
+    .places-section__count {
+      font-family: var(--font-data);
+      font-size: var(--font-size-sm);
+      color: var(--color-text-secondary);
+    }
+    .places-filter {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-1);
+      margin-bottom: var(--space-4);
+    }
+    .filter-btn {
+      padding: calc(var(--space-1) * 0.75) var(--space-2);
+      border-radius: var(--radius-sm);
+      font-family: var(--font-body);
+      font-size: var(--font-size-sm);
+      font-weight: 500;
+      border: 1px solid var(--color-border);
+      background: var(--color-surface-card);
+      color: var(--color-text-secondary);
+      min-height: var(--touch-target);
+      transition:
+        background var(--duration-fast) var(--easing-default),
+        color var(--duration-fast) var(--easing-default),
+        border-color var(--duration-fast) var(--easing-default);
+    }
+    .filter-btn:hover { background: var(--color-neutral-100); color: var(--color-text-primary); }
+    .filter-btn.is-active { background: var(--color-primary); color: var(--color-neutral-50); border-color: var(--color-primary); }
+
+    .places-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--space-card-gap);
+    }
+    @media (min-width: 600px) { .places-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 1024px) { .places-grid { grid-template-columns: repeat(4, 1fr); } }
+
+    /* =====================================================
+       ARTICLE SUMMARY
+    ===================================================== */
+    .article-section {
+      background: var(--color-neutral-900);
+      color: var(--color-neutral-50);
+      padding-block: var(--space-section-gap);
+    }
+    .article-section__inner {
+      max-width: var(--max-width-text);
+    }
+    .article-eyebrow {
+      font-family: var(--font-data);
+      font-size: var(--font-size-xs);
+      color: rgba(250,249,246,0.5);
+      letter-spacing: var(--letter-spacing-label);
+      text-transform: uppercase;
+      margin-bottom: var(--space-2);
+    }
+    .article-title {
+      font-size: var(--font-size-2xl);
+      color: var(--color-neutral-50);
+      margin-bottom: var(--space-3);
+    }
+    @media (max-width: 767px) { .article-title { font-size: var(--font-size-xl); } }
+    .article-summary {
+      font-family: var(--font-body);
+      font-size: var(--font-size-md);
+      line-height: var(--line-height-body);
+      color: rgba(250,249,246,0.8);
+    }
+    .article-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-1);
+      margin-top: var(--space-4);
+      padding: var(--space-2) var(--space-3);
+      background: var(--color-primary);
+      color: var(--color-neutral-50);
+      border-radius: var(--radius-sm);
+      font-family: var(--font-body);
+      font-size: var(--font-size-sm);
+      font-weight: 600;
+      text-decoration: none;
+      min-height: var(--touch-target);
+      border: 1px solid rgba(255,255,255,0.15);
+      transition: background var(--duration-fast) var(--easing-default);
+    }
+    .article-cta:hover { background: var(--color-primary-light); color: var(--color-neutral-50); }
+
+    /* =====================================================
+       BOTTOM TAB BAR (모바일 mock)
+    ===================================================== */
+    .tab-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: var(--tab-bar-height);
+      background: var(--color-surface);
+      border-top: 1px solid var(--color-border);
+      display: flex;
+      z-index: var(--z-tab);
+      box-shadow: 0 -2px 12px rgba(28,26,23,0.08);
+    }
+    .tab-bar__item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.2rem;
+      min-height: var(--touch-target); /* 44px 터치타겟 보장 */
+      font-family: var(--font-body);
+      font-size: 0.625rem;
+      font-weight: 500;
+      color: var(--color-text-secondary);
+      letter-spacing: var(--letter-spacing-label);
+      text-transform: uppercase;
+      border: none;
+      background: none;
+      cursor: pointer;
+      transition: color var(--duration-fast) var(--easing-default);
+    }
+    .tab-bar__item:hover { color: var(--color-primary); }
+    .tab-bar__item.is-active { color: var(--color-primary); }
+    .tab-bar__item.is-active svg { stroke: var(--color-primary); }
+    .tab-bar__icon { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* =====================================================
+       DRAWER (Explore / Search / Saved / Walks)
+    ===================================================== */
+    .drawer-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(28,26,23,0.5);
+      z-index: var(--z-overlay);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity var(--duration-slow) var(--easing-default);
+    }
+    .drawer-overlay.is-open { opacity: 1; pointer-events: auto; }
+
+    .drawer {
+      position: fixed;
+      bottom: var(--tab-bar-height);
+      left: 0;
+      right: 0;
+      max-height: 80dvh;
+      background: var(--color-surface);
+      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+      z-index: var(--z-panel);
+      transform: translateY(100%);
+      transition: transform var(--duration-slow) var(--easing-enter);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .drawer.is-open { transform: translateY(0); }
+
+    .drawer__handle {
+      width: 36px;
+      height: 4px;
+      background: var(--color-neutral-300);
+      border-radius: var(--radius-full);
+      margin: var(--space-2) auto var(--space-1);
+      flex-shrink: 0;
+    }
+    .drawer__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--space-1) var(--space-3) var(--space-2);
+      border-bottom: 1px solid var(--color-border);
+      flex-shrink: 0;
+    }
+    .drawer__title {
+      font-family: var(--font-display);
+      font-size: var(--font-size-xl);
+      font-weight: 600;
+      color: var(--color-text-primary);
+      letter-spacing: var(--letter-spacing-display);
+    }
+    .drawer__close {
+      width: var(--touch-target);
+      height: var(--touch-target);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--radius-full);
+      color: var(--color-text-secondary);
+      transition: background var(--duration-fast) var(--easing-default);
+    }
+    .drawer__close:hover { background: var(--color-neutral-100); }
+    .drawer__body {
+      overflow-y: auto;
+      flex: 1;
+      padding: var(--space-3);
+      -webkit-overflow-scrolling: touch;
+    }
+
+    /* Drawer tabs */
+    .drawer-tabs {
+      display: flex;
+      gap: var(--space-1);
+      border-bottom: 1px solid var(--color-border);
+      padding-bottom: var(--space-2);
+      margin-bottom: var(--space-3);
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .drawer-tabs::-webkit-scrollbar { display: none; }
+    .drawer-tab {
+      padding: var(--space-1) var(--space-2);
+      border-radius: var(--radius-sm);
+      font-family: var(--font-body);
+      font-size: var(--font-size-sm);
+      font-weight: 500;
+      color: var(--color-text-secondary);
+      white-space: nowrap;
+      min-height: var(--touch-target);
+      transition: background var(--duration-fast) var(--easing-default), color var(--duration-fast) var(--easing-default);
+      border: 1px solid transparent;
+    }
+    .drawer-tab:hover { background: var(--color-neutral-100); color: var(--color-text-primary); }
+    .drawer-tab.is-active { background: var(--color-primary-subtle); color: var(--color-primary); border-color: var(--color-primary-subtle); }
+
+    /* Accordion */
+    .accordion { border: 1px solid var(--color-border); border-radius: var(--radius-md); overflow: hidden; }
+    .accordion + .accordion { margin-top: var(--space-2); }
+    .accordion__trigger {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--space-2) var(--space-3);
+      background: var(--color-surface-card);
+      font-family: var(--font-body);
+      font-size: var(--font-size-sm);
+      font-weight: 600;
+      color: var(--color-text-primary);
+      min-height: var(--touch-target);
+      transition: background var(--duration-fast) var(--easing-default);
+    }
+    .accordion__trigger:hover { background: var(--color-neutral-100); }
+    .accordion__icon {
+      width: 18px;
+      height: 18px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      transition: transform var(--duration-fast) var(--easing-default);
+      flex-shrink: 0;
+    }
+    .accordion__trigger[aria-expanded="true"] .accordion__icon { transform: rotate(180deg); }
+    .accordion__panel {
+      display: none;
+      padding: var(--space-2) var(--space-3) var(--space-3);
+      background: var(--color-surface);
+      border-top: 1px solid var(--color-border);
+    }
+    .accordion__panel.is-open { display: block; }
+    .accordion__panel p {
+      font-family: var(--font-body);
+      font-size: var(--font-size-sm);
+      color: var(--color-text-secondary);
+      line-height: var(--line-height-body);
+    }
+
+    /* Search drawer */
+    .search-input-wrap {
+      position: relative;
+      margin-bottom: var(--space-3);
+    }
+    .search-input {
+      width: 100%;
+      padding: var(--space-2) var(--space-2) var(--space-2) var(--space-5);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      font-family: var(--font-body);
+      font-size: var(--font-size-md);
+      background: var(--color-surface-card);
+      color: var(--color-text-primary);
+      min-height: var(--touch-target);
+      outline: none;
+      transition: border-color var(--duration-fast) var(--easing-default);
+    }
+    .search-input:focus { border-color: var(--color-primary); }
+    .search-icon {
+      position: absolute;
+      left: var(--space-2);
+      top: 50%;
+      transform: translateY(-50%);
+      width: 18px;
+      height: 18px;
+      stroke: var(--color-text-secondary);
+      fill: none;
+      stroke-width: 2;
+      pointer-events: none;
+    }
+    .search-hint {
+      font-family: var(--font-data);
+      font-size: var(--font-size-xs);
+      color: var(--color-text-secondary);
+      letter-spacing: var(--letter-spacing-data);
+      padding: var(--space-4) 0;
+      text-align: center;
+    }
+
+    /* Saved empty state */
+    .saved-empty {
+      text-align: center;
+      padding: var(--space-6) var(--space-4);
+    }
+    .saved-empty__icon { margin-inline: auto; margin-bottom: var(--space-2); stroke: var(--color-neutral-300); }
+    .saved-empty__msg { font-family: var(--font-body); font-size: var(--font-size-sm); color: var(--color-text-secondary); }
+
+    /* Walks timeline */
+    .walks-timeline { display: flex; flex-direction: column; gap: var(--space-2); }
+    .walk-step {
+      display: flex;
+      gap: var(--space-2);
+      align-items: flex-start;
+    }
+    .walk-step__connector {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    .walk-step__dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--color-primary);
+      flex-shrink: 0;
+      margin-top: 5px;
+    }
+    .walk-step__line {
+      width: 2px;
+      flex: 1;
+      background: var(--color-border);
+      min-height: 24px;
+      margin-top: 4px;
+    }
+    .walk-step:last-child .walk-step__line { display: none; }
+    .walk-step__content { flex: 1; padding-bottom: var(--space-2); }
+    .walk-step__name {
+      font-family: var(--font-body);
+      font-size: var(--font-size-sm);
+      font-weight: 600;
+      color: var(--color-text-primary);
+    }
+    .walk-step__desc {
+      font-family: var(--font-data);
+      font-size: var(--font-size-xs);
+      color: var(--color-text-secondary);
+      margin-top: 2px;
+    }
+
+    /* =====================================================
+       SCROLL FADE (애니메이션)
+    ===================================================== */
+    .scroll-fade {
+      opacity: 0;
+      transform: translateY(16px);
+      transition:
+        opacity   var(--scrollfade-duration) var(--scrollfade-easing),
+        transform var(--scrollfade-duration) var(--scrollfade-easing);
+    }
+    .scroll-fade.is-visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* =====================================================
+       FOOTER
+    ===================================================== */
+    .site-footer {
+      background: var(--color-neutral-900);
+      color: rgba(250,249,246,0.5);
+      padding: var(--space-6) var(--space-2);
+      text-align: center;
+    }
+    .site-footer p {
+      font-family: var(--font-data);
+      font-size: var(--font-size-xs);
+      letter-spacing: var(--letter-spacing-data);
+    }
+    .site-footer a { color: rgba(250,249,246,0.6); }
+
+    /* =====================================================
+       UTILITY
+    ===================================================== */
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      white-space: nowrap;
+      border: 0;
+    }
+    .divider {
+      border: none;
+      border-top: 1px solid var(--color-border);
+      margin-block: var(--space-4);
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== SKIP LINK ===== -->
+<a class="skip-link" href="#main-content">본문으로 바로가기</a>
+
+<!-- ===== SITE HEADER ===== -->
+<header class="site-header" role="banner">
+  <div class="container site-header__inner">
+    <a class="site-header__logo" href="#" aria-label="동네 탐방 홈">동네 탐방</a>
+    <nav class="site-header__nav" aria-label="주 메뉴">
+      <button class="is-active" aria-current="page">지도</button>
+      <button onclick="openDrawer('explore')">동네</button>
+      <button onclick="openDrawer('search')">검색</button>
+      <button onclick="openDrawer('saved')">저장</button>
+    </nav>
+  </div>
+</header>
+
+<!-- ===== MAIN ===== -->
+<main id="main-content">
+
+  <!-- ── HERO ── -->
+  <section class="hero" aria-labelledby="hero-city-title">
+    <div class="hero__bg-texture" aria-hidden="true"></div>
+    <div class="container hero__inner">
+      <p class="hero__breadcrumb" aria-label="위치 경로">
+        <span>서울</span>
+        <span>성동구</span>
+        <span>성수동</span>
+      </p>
+      <h1 id="hero-city-title" class="display-title hero__title">성수동</h1>
+      <p class="hero__subtitle">
+        인더스트리얼 감성과 현대 문화가 공존하는 서울의 골목
+      </p>
+      <div class="hero__tags" role="list" aria-label="동네 태그">
+        <span class="tag tag--neutral" role="listitem">#인더스트리얼</span>
+        <span class="tag tag--neutral" role="listitem">#서울숲인근</span>
+        <span class="tag tag--neutral" role="listitem">#카페거리</span>
+        <span class="tag tag--neutral" role="listitem">#복합문화공간</span>
+        <span class="tag tag--neutral" role="listitem">#주말탐방</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── INTRO MAP (히어로 지도 패널) ── -->
+  <section class="intro-map-section" aria-labelledby="intro-map-label">
+    <div class="container intro-map-section__inner">
+      <p id="intro-map-label" class="intro-map-section__label">성수동 장소 지도 — 핀 4개</p>
+      <div class="intro-map-wrapper">
+        <!-- 실제 지도 -->
+        <div
+          id="hero-map"
+          aria-label="성수동 장소 지도. 4개 핀: 1 헤비스테이크, 2 난포, 3 대림창고, 4 언더스탠드에비뉴"
+          role="application"
+        ></div>
+        <!-- 폴백 (JS가 활성화) -->
+        <div
+          id="hero-map-fallback"
+          role="region"
+          aria-label="지도를 불러올 수 없는 경우 장소 목록"
+          aria-live="polite"
+        >
+          <p class="map-fallback__notice">
+            지도를 불러오지 못했습니다. 아래 장소 목록에서 주소를 확인하세요.<br>
+            <span style="font-family:var(--font-data);font-size:var(--font-size-xs);color:var(--color-text-secondary);">
+              운영자: 인증 실패 시 NCP 콘솔 웹 서비스 URL에 현재 출처(예: http://localhost:8055)가 등록됐는지, 키 종류(ncpKeyId/ncpClientId)가 맞는지 확인하세요.
+            </span>
+          </p>
+          <ol class="map-fallback__list" id="hero-fallback-list" aria-label="장소 핀 목록"></ol>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── NEIGHBORHOOD INTRO ── -->
+  <section class="neighborhood-intro" aria-labelledby="neighborhood-heading">
+    <div class="container">
+      <div class="neighborhood-intro__grid">
+        <div>
+          <p class="neighborhood-intro__eyebrow">동네 소개</p>
+          <h2 id="neighborhood-heading" class="display-title neighborhood-intro__heading">
+            벽돌골목과 서울숲 사이
+          </h2>
+          <p class="neighborhood-intro__body">
+            성수동은 오래된 공장과 구두 공방이 남긴 붉은 벽돌과 철골 사이로 감도 높은 카페·맛집·복합문화공간이 자리를 채워가는 동네다. 한강과 서울숲이 가까워 반나절 도보 탐방에 알맞고, 골목을 돌 때마다 산업 유산과 현대 감성이 뒤섞인 장면이 이어진다. 팝업·전시·브런치를 하나의 동선 안에 묶어 경험할 수 있어, 마이크로 트래블러들이 반복해 찾는 동네가 됐다.
+          </p>
+        </div>
+        <div class="neighborhood-intro__stats" aria-label="동네 통계">
+          <div class="stat-block">
+            <p class="stat-block__value">4</p>
+            <p class="stat-block__label">큐레이션 장소</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__value">3</p>
+            <p class="stat-block__label">카테고리</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__value">0.5</p>
+            <p class="stat-block__label">반나절 코스 (일)</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__value">37.54</p>
+            <p class="stat-block__label">북위 (성수역)</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SPLIT VIEW (에디토리얼 + 지도) ── -->
+  <section class="split-view" aria-labelledby="editorial-title">
+    <!-- 모바일 미니맵 토글 -->
+    <button
+      class="mobile-map-toggle"
+      aria-expanded="true"
+      aria-controls="split-map-panel"
+      onclick="toggleMobileMap(this)"
+    >
+      <svg class="mobile-map-toggle__icon" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <polyline points="4 6 8 10 12 6"/>
+      </svg>
+      지도 보기 / 숨기기
+    </button>
+
+    <div class="split-view__inner container" style="max-width:100%;padding:0;">
+      <!-- 좌: 에디토리얼 -->
+      <article class="split-editorial scroll-fade">
+        <p class="editorial-eyebrow">에디토리얼 리포트</p>
+        <h2 id="editorial-title" class="display-title editorial-title">
+          성수동 반나절 탐방:<br>벽돌골목에서 서울숲까지
+        </h2>
+
+        <div class="editorial-body">
+          <p>성수역을 나오면 연무장길을 따라 인더스트리얼 감성의 맛집과 카페가 이어진다. 조금 더 걸으면 서울숲4길의 한식 레스토랑과 서울숲 인근 복합문화공간이 나타난다.</p>
+        </div>
+
+        <blockquote class="editorial-highlight">
+          <p>"낡은 창고와 세련된 팝업이 한 골목에 공존하는 풍경이 이 동네의 핵심 매력이다."</p>
+        </blockquote>
+
+        <div class="editorial-body">
+          <p>이 네 곳을 한 바퀴 돌면 성수동이 왜 '서울에서 가장 빠르게 변하는 동네'로 불리는지 체감하게 된다. 오전 11시에 출발해 서울숲 산책으로 마무리하면 반나절 코스로 딱 맞는 일정이 완성된다.</p>
+        </div>
+
+        <!-- 장소 참조 목록 -->
+        <nav class="place-ref-list" aria-label="본문 장소 참조">
+          <button type="button" class="place-ref" onclick="scrollToCard(1)" aria-label="1번 장소 헤비스테이크 카드로 이동">
+            <div class="map-pin map-pin--food" aria-hidden="true">1</div>
+            <div class="place-ref__info">
+              <p class="place-ref__name">헤비스테이크</p>
+              <p class="place-ref__addr">서울 성동구 연무장길 38</p>
+            </div>
+            <span class="tag tag--food">음식</span>
+          </button>
+          <button type="button" class="place-ref" onclick="scrollToCard(2)" aria-label="2번 장소 난포 카드로 이동">
+            <div class="map-pin map-pin--food" aria-hidden="true">2</div>
+            <div class="place-ref__info">
+              <p class="place-ref__name">난포</p>
+              <p class="place-ref__addr">서울 성동구 서울숲4길 18-8</p>
+            </div>
+            <span class="tag tag--food">음식</span>
+          </button>
+          <button type="button" class="place-ref" onclick="scrollToCard(3)" aria-label="3번 장소 대림창고 카드로 이동">
+            <div class="map-pin map-pin--cafe" aria-hidden="true">3</div>
+            <div class="place-ref__info">
+              <p class="place-ref__name">대림창고</p>
+              <p class="place-ref__addr">서울 성동구 성수이로 78</p>
+            </div>
+            <span class="tag tag--cafe">카페</span>
+          </button>
+          <button type="button" class="place-ref" onclick="scrollToCard(4)" aria-label="4번 장소 언더스탠드에비뉴 카드로 이동">
+            <div class="map-pin map-pin--space" aria-hidden="true">4</div>
+            <div class="place-ref__info">
+              <p class="place-ref__name">언더스탠드에비뉴</p>
+              <p class="place-ref__addr">서울 성동구 왕십리로 63</p>
+            </div>
+            <span class="tag tag--space">공간</span>
+          </button>
+        </nav>
+      </article>
+
+      <!-- 우: 지도 패널 -->
+      <div id="split-map-panel" class="split-map">
+        <div class="split-map__sticky">
+          <div
+            id="split-map"
+            aria-label="성수동 에디토리얼 지도 패널"
+            role="application"
+          ></div>
+          <div
+            id="split-map-fallback"
+            role="region"
+            aria-label="지도를 불러올 수 없는 경우 핀 목록"
+            aria-live="polite"
+          >
+            <p class="map-fallback__notice" style="margin:var(--space-2);">
+              지도를 불러오지 못했습니다. 장소 카드에서 주소를 확인하세요.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PLACES GRID ── -->
+  <section class="places-section" id="places" aria-labelledby="places-heading">
+    <div class="container">
+      <div class="places-section__header">
+        <h2 id="places-heading" class="section-heading">큐레이션 장소</h2>
+        <span class="places-section__count" aria-live="polite" id="places-count">4곳</span>
+      </div>
+
+      <!-- 필터 -->
+      <div class="places-filter" role="group" aria-label="카테고리 필터">
+        <button class="filter-btn is-active" data-filter="all" onclick="filterPlaces(this,'all')" aria-pressed="true">전체</button>
+        <button class="filter-btn" data-filter="food" onclick="filterPlaces(this,'food')" aria-pressed="false">
+          <span class="tag--food" style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--color-tag-food-bg);border:1px solid var(--color-tag-food-border);vertical-align:middle;margin-right:4px;"></span>
+          음식
+        </button>
+        <button class="filter-btn" data-filter="cafe" onclick="filterPlaces(this,'cafe')" aria-pressed="false">
+          <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--color-tag-cafe-bg);border:1px solid var(--color-tag-cafe-border);vertical-align:middle;margin-right:4px;"></span>
+          카페
+        </button>
+        <button class="filter-btn" data-filter="space" onclick="filterPlaces(this,'space')" aria-pressed="false">
+          <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--color-tag-space-bg);border:1px solid var(--color-tag-space-border);vertical-align:middle;margin-right:4px;"></span>
+          공간
+        </button>
+      </div>
+
+      <!-- 카드 그리드 -->
+      <div class="places-grid" id="places-grid" role="list" aria-label="장소 카드 목록">
+        <!-- 카드는 JS가 렌더 -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ── ARTICLE SUMMARY ── -->
+  <section class="article-section" aria-labelledby="article-heading">
+    <div class="container article-section__inner">
+      <p class="article-eyebrow">아티클 요약</p>
+      <h2 id="article-heading" class="display-title article-title">
+        성수동 반나절 탐방: 벽돌골목에서 서울숲까지
+      </h2>
+      <p class="article-summary">
+        성수역을 나오면 연무장길을 따라 인더스트리얼 감성의 맛집과 카페가 이어지고, 조금 더 걸으면 서울숲4길의 한식 레스토랑과 서울숲 인근 복합문화공간이 나타난다. 이 네 곳을 한 바퀴 돌면 성수동이 왜 '서울에서 가장 빠르게 변하는 동네'로 불리는지 체감하게 된다. 낡은 창고와 세련된 팝업이 한 골목에 공존하는 풍경이 이 동네의 핵심 매력이다. 오전 11시에 출발해 서울숲 산책으로 마무리하면 반나절 코스로 딱 맞는 일정이 완성된다.
+      </p>
+      <a href="#places" class="article-cta">
+        장소 카드 보기
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <polyline points="4 6 8 10 12 6"/>
+        </svg>
+      </a>
+    </div>
+  </section>
+
+</main>
+
+<!-- ===== FOOTER ===== -->
+<footer class="site-footer" role="contentinfo">
+  <p>동네 탐방 — 성수동 시안 / 2026-06-16 확인 / 좌표 null 상태 · 지도는 키 발급 후 활성화</p>
+</footer>
+
+<!-- ===== DRAWER OVERLAY ===== -->
+<div class="drawer-overlay" id="drawer-overlay" aria-hidden="true" onclick="closeDrawer()"></div>
+
+<!-- ===== DRAWER: Explore (동네 탐색) ===== -->
+<div
+  class="drawer"
+  id="drawer-explore"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="drawer-explore-title"
+  hidden
+>
+  <div class="drawer__handle" aria-hidden="true"></div>
+  <div class="drawer__header">
+    <h2 id="drawer-explore-title" class="drawer__title">동네 탐색</h2>
+    <button class="drawer__close" onclick="closeDrawer()" aria-label="닫기">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+        <line x1="4" y1="4" x2="16" y2="16"/><line x1="16" y1="4" x2="4" y2="16"/>
+      </svg>
+    </button>
+  </div>
+  <div class="drawer__body">
+    <!-- 탭 -->
+    <div class="drawer-tabs" role="tablist" aria-label="탐색 탭">
+      <button class="drawer-tab is-active" role="tab" aria-selected="true" onclick="switchDrawerTab(this,'explore-cluster')">클러스터</button>
+      <button class="drawer-tab" role="tab" aria-selected="false" onclick="switchDrawerTab(this,'explore-boundary')">경계</button>
+      <button class="drawer-tab" role="tab" aria-selected="false" onclick="switchDrawerTab(this,'explore-filter')">필터</button>
+    </div>
+    <!-- 클러스터 탭 패널 -->
+    <div id="explore-cluster" role="tabpanel">
+      <div class="accordion">
+        <button class="accordion__trigger" aria-expanded="true" onclick="toggleAccordion(this)">
+          성수동 장소 클러스터
+          <svg class="accordion__icon" viewBox="0 0 20 20"><polyline points="5 8 10 13 15 8"/></svg>
+        </button>
+        <div class="accordion__panel is-open">
+          <p>4개 핀이 성수동 전역에 분포합니다. 지도에서 핀을 클릭하면 해당 장소 카드로 이동합니다.</p>
+          <div style="display:flex;flex-wrap:wrap;gap:var(--space-1);margin-top:var(--space-2);">
+            <span class="tag tag--food">음식 2곳</span>
+            <span class="tag tag--cafe">카페 1곳</span>
+            <span class="tag tag--space">공간 1곳</span>
+          </div>
+        </div>
+      </div>
+      <div class="accordion" style="margin-top:var(--space-2);">
+        <button class="accordion__trigger" aria-expanded="false" onclick="toggleAccordion(this)">
+          주변 동네
+          <svg class="accordion__icon" viewBox="0 0 20 20"><polyline points="5 8 10 13 15 8"/></svg>
+        </button>
+        <div class="accordion__panel">
+          <p>서울숲 · 뚝섬 · 왕십리 · 건대입구 — 도보 또는 자전거로 이동 가능한 인근 동네입니다.</p>
+        </div>
+      </div>
+    </div>
+    <!-- 경계 탭 패널 -->
+    <div id="explore-boundary" role="tabpanel" hidden>
+      <p style="font-family:var(--font-body);font-size:var(--font-size-sm);color:var(--color-text-secondary);line-height:var(--line-height-body);">
+        성동구 성수동1가·2가, 왕십리2동 일부. 서울숲역(분당선) ~ 성수역(2호선) 사이 도보권.
+      </p>
+    </div>
+    <!-- 필터 탭 패널 -->
+    <div id="explore-filter" role="tabpanel" hidden>
+      <div class="places-filter" role="group" aria-label="카테고리 필터">
+        <button class="filter-btn is-active" onclick="filterPlaces(this,'all');closeDrawer();" aria-pressed="true">전체</button>
+        <button class="filter-btn" onclick="filterPlaces(this,'food');closeDrawer();" aria-pressed="false">음식</button>
+        <button class="filter-btn" onclick="filterPlaces(this,'cafe');closeDrawer();" aria-pressed="false">카페</button>
+        <button class="filter-btn" onclick="filterPlaces(this,'space');closeDrawer();" aria-pressed="false">공간</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== DRAWER: Search (검색) ===== -->
+<div
+  class="drawer"
+  id="drawer-search"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="drawer-search-title"
+  hidden
+>
+  <div class="drawer__handle" aria-hidden="true"></div>
+  <div class="drawer__header">
+    <h2 id="drawer-search-title" class="drawer__title">장소 검색</h2>
+    <button class="drawer__close" onclick="closeDrawer()" aria-label="닫기">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+        <line x1="4" y1="4" x2="16" y2="16"/><line x1="16" y1="4" x2="4" y2="16"/>
+      </svg>
+    </button>
+  </div>
+  <div class="drawer__body">
+    <div class="search-input-wrap">
+      <svg class="search-icon" viewBox="0 0 20 20" aria-hidden="true">
+        <circle cx="8.5" cy="8.5" r="5.5"/><line x1="12.5" y1="12.5" x2="18" y2="18"/>
+      </svg>
+      <input
+        class="search-input"
+        type="search"
+        placeholder="장소명·카테고리·주소 검색"
+        aria-label="장소 검색"
+        id="search-input"
+        oninput="handleSearch(this.value)"
+      >
+    </div>
+    <div id="search-results">
+      <p class="search-hint">검색어를 입력하면 장소를 찾아드립니다.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== DRAWER: Saved (저장) ===== -->
+<div
+  class="drawer"
+  id="drawer-saved"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="drawer-saved-title"
+  hidden
+>
+  <div class="drawer__handle" aria-hidden="true"></div>
+  <div class="drawer__header">
+    <h2 id="drawer-saved-title" class="drawer__title">저장한 장소</h2>
+    <button class="drawer__close" onclick="closeDrawer()" aria-label="닫기">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+        <line x1="4" y1="4" x2="16" y2="16"/><line x1="16" y1="4" x2="4" y2="16"/>
+      </svg>
+    </button>
+  </div>
+  <div class="drawer__body">
+    <div class="saved-empty" aria-live="polite">
+      <svg class="saved-empty__icon" width="48" height="48" viewBox="0 0 48 48" fill="none" stroke-width="1.5" aria-hidden="true">
+        <path d="M12 6h24a2 2 0 0 1 2 2v32l-14-8L10 40V8a2 2 0 0 1 2-2z"/>
+      </svg>
+      <p class="saved-empty__msg">아직 저장한 장소가 없습니다.<br>장소 카드의 북마크 아이콘을 눌러 저장하세요.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== DRAWER: Walks (산책 코스) ===== -->
+<div
+  class="drawer"
+  id="drawer-walks"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="drawer-walks-title"
+  hidden
+>
+  <div class="drawer__handle" aria-hidden="true"></div>
+  <div class="drawer__header">
+    <h2 id="drawer-walks-title" class="drawer__title">추천 산책 코스</h2>
+    <button class="drawer__close" onclick="closeDrawer()" aria-label="닫기">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+        <line x1="4" y1="4" x2="16" y2="16"/><line x1="16" y1="4" x2="4" y2="16"/>
+      </svg>
+    </button>
+  </div>
+  <div class="drawer__body">
+    <p style="font-family:var(--font-data);font-size:var(--font-size-xs);color:var(--color-text-secondary);margin-bottom:var(--space-3);letter-spacing:var(--letter-spacing-data);">성수동 반나절 코스 · 약 2~3시간</p>
+    <div class="walks-timeline" role="list" aria-label="산책 코스 단계">
+      <div class="walk-step" role="listitem">
+        <div class="walk-step__connector" aria-hidden="true">
+          <div class="walk-step__dot" style="background:var(--pin-food-bg);border:2px solid var(--pin-food-fg);"></div>
+          <div class="walk-step__line"></div>
+        </div>
+        <div class="walk-step__content">
+          <p class="walk-step__name"><span class="map-pin map-pin--food" style="display:inline-flex;width:1.4rem;height:1.4rem;font-size:0.65rem;margin-right:0.4rem;" aria-hidden="true">1</span>헤비스테이크</p>
+          <p class="walk-step__desc">연무장길 38 · 점심 or 브런치 시작</p>
+        </div>
+      </div>
+      <div class="walk-step" role="listitem">
+        <div class="walk-step__connector" aria-hidden="true">
+          <div class="walk-step__dot" style="background:var(--pin-food-bg);border:2px solid var(--pin-food-fg);"></div>
+          <div class="walk-step__line"></div>
+        </div>
+        <div class="walk-step__content">
+          <p class="walk-step__name"><span class="map-pin map-pin--food" style="display:inline-flex;width:1.4rem;height:1.4rem;font-size:0.65rem;margin-right:0.4rem;" aria-hidden="true">2</span>난포</p>
+          <p class="walk-step__desc">서울숲4길 18-8 · 한식 레스토랑</p>
+        </div>
+      </div>
+      <div class="walk-step" role="listitem">
+        <div class="walk-step__connector" aria-hidden="true">
+          <div class="walk-step__dot" style="background:var(--pin-cafe-bg);border:2px solid var(--pin-cafe-fg);"></div>
+          <div class="walk-step__line"></div>
+        </div>
+        <div class="walk-step__content">
+          <p class="walk-step__name"><span class="map-pin map-pin--cafe" style="display:inline-flex;width:1.4rem;height:1.4rem;font-size:0.65rem;margin-right:0.4rem;" aria-hidden="true">3</span>대림창고</p>
+          <p class="walk-step__desc">성수이로 78 · 카페 겸 갤러리</p>
+        </div>
+      </div>
+      <div class="walk-step" role="listitem">
+        <div class="walk-step__connector" aria-hidden="true">
+          <div class="walk-step__dot" style="background:var(--pin-space-bg);border:2px solid var(--pin-space-fg);"></div>
+          <div class="walk-step__line"></div>
+        </div>
+        <div class="walk-step__content">
+          <p class="walk-step__name"><span class="map-pin map-pin--space" style="display:inline-flex;width:1.4rem;height:1.4rem;font-size:0.65rem;margin-right:0.4rem;" aria-hidden="true">4</span>언더스탠드에비뉴</p>
+          <p class="walk-step__desc">왕십리로 63 · 서울숲 인근 마무리</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== BOTTOM TAB BAR ===== -->
+<nav class="tab-bar" aria-label="하단 탭 메뉴" role="navigation">
+  <button class="tab-bar__item is-active" aria-label="지도" onclick="activateTab(this)" aria-pressed="true">
+    <svg class="tab-bar__icon" viewBox="0 0 24 24" aria-hidden="true">
+      <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/>
+      <line x1="8" y1="2" x2="8" y2="18"/>
+      <line x1="16" y1="6" x2="16" y2="22"/>
+    </svg>
+    <span>지도</span>
+  </button>
+  <button class="tab-bar__item" aria-label="동네 탐색" onclick="activateTab(this);openDrawer('explore')" aria-pressed="false">
+    <svg class="tab-bar__icon" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+      <polyline points="9 22 9 12 15 12 15 22"/>
+    </svg>
+    <span>동네</span>
+  </button>
+  <button class="tab-bar__item" aria-label="검색" onclick="activateTab(this);openDrawer('search')" aria-pressed="false">
+    <svg class="tab-bar__icon" viewBox="0 0 24 24" aria-hidden="true">
+      <circle cx="11" cy="11" r="8"/>
+      <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+    </svg>
+    <span>검색</span>
+  </button>
+  <button class="tab-bar__item" aria-label="저장" onclick="activateTab(this);openDrawer('saved')" aria-pressed="false">
+    <svg class="tab-bar__icon" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+    </svg>
+    <span>저장</span>
+  </button>
+  <button class="tab-bar__item" aria-label="산책 코스" onclick="activateTab(this);openDrawer('walks')" aria-pressed="false">
+    <svg class="tab-bar__icon" viewBox="0 0 24 24" aria-hidden="true">
+      <circle cx="12" cy="5" r="1"/>
+      <path d="M9 20l1-4 2 2 2-4"/>
+      <path d="M6 11l1-3 2 2 2-1 2 1 1-3"/>
+    </svg>
+    <span>코스</span>
+  </button>
+</nav>
+
+<!-- ===================================================
+     JAVASCRIPT
+=================================================== -->
+<script>
+  /* ====================================================
+     장소 데이터 (인라인 PLACES 배열)
+     출처: artifacts/content/places.json
+     [사용자 게이트 G3] geocode.mjs 실행 후 생성되는 ./data/places.json을
+     bootstrap()이 자동으로 읽어 좌표(lat/lng)만 병합합니다. 수동 교체 불필요.
+     아래 인라인 배열은 좌표 없는 기본값(폴백)입니다.
+  ==================================================== */
+  let PLACES = [
+    {
+      pinNo: 1,
+      name: '헤비스테이크',
+      category: 'food',
+      address: '서울 성동구 연무장길 38',
+      status: '운영중 [확인 필요]',
+      lastChecked: '2026-06-16',
+      lat: null,
+      lng: null,
+      blurb: '오픈키친에서 직접 굽는 스테이크를 합리적인 가격에 즐길 수 있는 성수 대표 고기집. 혼밥과 단체 모임 모두 부담 없는 분위기로 직장인 단골층이 두텁다.',
+      photo: null
+    },
+    {
+      pinNo: 2,
+      name: '난포',
+      category: 'food',
+      address: '서울 성동구 서울숲4길 18-8',
+      status: '운영중 [확인 필요]',
+      lastChecked: '2026-06-16',
+      lat: null,
+      lng: null,
+      blurb: '제철 재료를 활용한 한식을 현대적으로 재해석한 레스토랑으로, 시그니처 강된장쌈밥과 묵은지말이가 특히 호평을 받는다. 8천 건 이상의 리뷰가 맛의 신뢰를 뒷받침한다.',
+      photo: null
+    },
+    {
+      pinNo: 3,
+      name: '대림창고',
+      category: 'cafe',
+      address: '서울 성동구 성수이로 78',
+      status: '운영중 [확인 필요]',
+      lastChecked: '2026-06-16',
+      lat: null,
+      lng: null,
+      blurb: '1970년대 정미소·물류창고 건물을 리모델링한 카페 겸 갤러리로, 성수동 카페 문화의 시발점이 된 공간이다. 붉은 벽돌과 거친 철골 구조가 그대로 살아 있어 에디토리얼 감성 사진을 남기기에 좋다.',
+      photo: null
+    },
+    {
+      pinNo: 4,
+      name: '언더스탠드에비뉴',
+      category: 'space',
+      address: '서울 성동구 왕십리로 63',
+      status: '운영중 [확인 필요]',
+      lastChecked: '2026-06-16',
+      lat: null,
+      lng: null,
+      blurb: '100여 개의 업사이클 컨테이너로 조성된 ESG 복합문화공간으로, 서울숲역 도보 3분 거리에 있다. 팝업 스토어·전시·사회적기업 숍이 함께 입점해 쇼핑과 문화 체험을 동시에 즐길 수 있다.',
+      photo: null
+    }
+  ];
+
+  /* ====================================================
+     카테고리 라벨
+  ==================================================== */
+  const CAT_LABEL = { food: '음식', cafe: '카페', space: '공간' };
+
+  /* ====================================================
+     Place 카드 렌더
+  ==================================================== */
+  function renderCards(filtered) {
+    const grid = document.getElementById('places-grid');
+    const count = document.getElementById('places-count');
+    if (!grid) return;
+    grid.innerHTML = filtered.map(p => `
+      <article
+        class="place-card place-card--${p.category} scroll-fade"
+        id="place-card-${p.pinNo}"
+        role="listitem"
+        aria-label="${p.pinNo}번 장소 ${p.name}"
+      >
+        <div class="place-card__image" role="img" aria-label="${p.name} 분위기 이미지 (일러스트, 실제 매장 사진 아님)">
+          <img
+            class="place-card__photo"
+            src="assets/place-${p.pinNo}.png"
+            alt="${p.name} 분위기 일러스트"
+            loading="lazy"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+          />
+          <div class="place-card__image-placeholder" aria-hidden="true" style="display:none;">
+            <svg width="40" height="40" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round">
+              <rect x="4" y="4" width="32" height="32" rx="4"/>
+              <circle cx="14" cy="15" r="4"/>
+              <polyline points="4,28 12,20 18,26 26,16 36,28"/>
+            </svg>
+            <span>사진 준비중</span>
+          </div>
+        </div>
+        <div class="place-card__body">
+          <div class="place-card__header">
+            <div class="place-card__number" aria-label="${p.pinNo}번 핀" title="지도 핀 ${p.pinNo}번">${p.pinNo}</div>
+            <h3 class="place-card__name">${p.name}</h3>
+          </div>
+          <span class="tag tag--${p.category}">${CAT_LABEL[p.category] || p.category}</span>
+          <p class="place-card__blurb">${p.blurb}</p>
+          <div class="place-card__meta">
+            <p class="place-card__address" aria-label="주소">
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" style="display:inline;margin-right:3px;vertical-align:-1px;">
+                <path d="M8 1.5C5.5 1.5 3.5 3.5 3.5 6c0 3.5 4.5 8.5 4.5 8.5S12.5 9.5 12.5 6c0-2.5-2-4.5-4.5-4.5z"/><circle cx="8" cy="6" r="1.5"/>
+              </svg>
+              ${p.address}
+            </p>
+            <p class="place-card__status" aria-label="영업 상태">${p.status}</p>
+            <time class="place-card__date" datetime="${p.lastChecked}" aria-label="최종 확인일">
+              최종확인 ${p.lastChecked}
+            </time>
+          </div>
+        </div>
+      </article>
+    `).join('');
+    if (count) count.textContent = `${filtered.length}곳`;
+    // 스크롤 페이드 옵저버 재연결
+    observeScrollFade();
+  }
+
+  /* ====================================================
+     필터
+  ==================================================== */
+  function filterPlaces(btn, cat) {
+    // 필터 버튼 상태 업데이트
+    document.querySelectorAll('.filter-btn').forEach(b => {
+      b.classList.remove('is-active');
+      b.setAttribute('aria-pressed', 'false');
+    });
+    if (btn) {
+      btn.classList.add('is-active');
+      btn.setAttribute('aria-pressed', 'true');
+    }
+    const filtered = cat === 'all' ? PLACES : PLACES.filter(p => p.category === cat);
+    renderCards(filtered);
+  }
+
+  /* ====================================================
+     스크롤로 카드 이동
+  ==================================================== */
+  function scrollToCard(pinNo) {
+    const card = document.getElementById('place-card-' + pinNo);
+    if (card) {
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      card.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' });
+      card.classList.add('is-active');
+      setTimeout(() => card.classList.remove('is-active'), 2000);
+    }
+  }
+
+  /* ====================================================
+     DRAWER 열기/닫기
+  ==================================================== */
+  let currentDrawer = null;
+
+  function openDrawer(name) {
+    closeDrawer();
+    const el = document.getElementById('drawer-' + name);
+    const overlay = document.getElementById('drawer-overlay');
+    if (!el) return;
+    el.removeAttribute('hidden');
+    requestAnimationFrame(() => {
+      el.classList.add('is-open');
+      overlay.classList.add('is-open');
+      overlay.removeAttribute('aria-hidden');
+    });
+    currentDrawer = name;
+    // 포커스 이동
+    const closeBtn = el.querySelector('.drawer__close');
+    if (closeBtn) closeBtn.focus();
+    // ESC 닫기
+    document.addEventListener('keydown', handleDrawerKey);
+  }
+
+  function closeDrawer() {
+    if (!currentDrawer) return;
+    const el = document.getElementById('drawer-' + currentDrawer);
+    const overlay = document.getElementById('drawer-overlay');
+    if (el) {
+      el.classList.remove('is-open');
+      el.addEventListener('transitionend', () => el.setAttribute('hidden', ''), { once: true });
+    }
+    if (overlay) {
+      overlay.classList.remove('is-open');
+      overlay.setAttribute('aria-hidden', 'true');
+    }
+    currentDrawer = null;
+    document.removeEventListener('keydown', handleDrawerKey);
+  }
+
+  function handleDrawerKey(e) {
+    if (e.key === 'Escape') closeDrawer();
+  }
+
+  /* ====================================================
+     Drawer 탭 전환
+  ==================================================== */
+  function switchDrawerTab(btn, panelId) {
+    const drawer = btn.closest('.drawer');
+    drawer.querySelectorAll('.drawer-tab').forEach(t => {
+      t.classList.remove('is-active');
+      t.setAttribute('aria-selected', 'false');
+    });
+    drawer.querySelectorAll('[role="tabpanel"]').forEach(p => p.setAttribute('hidden', ''));
+    btn.classList.add('is-active');
+    btn.setAttribute('aria-selected', 'true');
+    const panel = document.getElementById(panelId);
+    if (panel) panel.removeAttribute('hidden');
+  }
+
+  /* ====================================================
+     아코디언
+  ==================================================== */
+  function toggleAccordion(btn) {
+    const expanded = btn.getAttribute('aria-expanded') === 'true';
+    btn.setAttribute('aria-expanded', !expanded);
+    const panel = btn.nextElementSibling;
+    if (panel) panel.classList.toggle('is-open', !expanded);
+  }
+
+  /* ====================================================
+     하단 탭 활성 상태
+  ==================================================== */
+  function activateTab(btn) {
+    document.querySelectorAll('.tab-bar__item').forEach(t => {
+      t.classList.remove('is-active');
+      t.setAttribute('aria-pressed', 'false');
+    });
+    btn.classList.add('is-active');
+    btn.setAttribute('aria-pressed', 'true');
+  }
+
+  /* ====================================================
+     모바일 미니맵 토글
+  ==================================================== */
+  function toggleMobileMap(btn) {
+    const panel = document.getElementById('split-map-panel');
+    const expanded = btn.getAttribute('aria-expanded') === 'true';
+    btn.setAttribute('aria-expanded', !expanded);
+    if (panel) {
+      panel.style.display = expanded ? 'none' : '';
+    }
+  }
+
+  /* ====================================================
+     검색 (인라인 mock)
+  ==================================================== */
+  function handleSearch(query) {
+    const resultsEl = document.getElementById('search-results');
+    if (!resultsEl) return;
+    const q = query.trim().toLowerCase();
+    if (!q) {
+      resultsEl.innerHTML = '<p class="search-hint">검색어를 입력하면 장소를 찾아드립니다.</p>';
+      return;
+    }
+    const matched = PLACES.filter(p =>
+      p.name.toLowerCase().includes(q) ||
+      p.address.toLowerCase().includes(q) ||
+      CAT_LABEL[p.category].includes(q) ||
+      p.blurb.toLowerCase().includes(q)
+    );
+    if (matched.length === 0) {
+      resultsEl.innerHTML = '<p class="search-hint">일치하는 장소가 없습니다.</p>';
+      return;
+    }
+    resultsEl.innerHTML = '<div class="place-ref-list" role="list">' + matched.map(p => `
+      <div class="place-ref" role="listitem" tabindex="0"
+        onclick="closeDrawer();scrollToCard(${p.pinNo})"
+        onkeydown="if(event.key==='Enter'){closeDrawer();scrollToCard(${p.pinNo})}">
+        <div class="map-pin map-pin--${p.category}" aria-hidden="true">${p.pinNo}</div>
+        <div class="place-ref__info">
+          <p class="place-ref__name">${p.name}</p>
+          <p class="place-ref__addr">${p.address}</p>
+        </div>
+        <span class="tag tag--${p.category}">${CAT_LABEL[p.category]}</span>
+      </div>
+    `).join('') + '</div>';
+  }
+
+  /* ====================================================
+     스크롤 페이드 (IntersectionObserver)
+  ==================================================== */
+  function observeScrollFade() {
+    const els = document.querySelectorAll('.scroll-fade:not(.is-visible)');
+    if (!('IntersectionObserver' in window)) {
+      els.forEach(el => el.classList.add('is-visible'));
+      return;
+    }
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          obs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    els.forEach(el => obs.observe(el));
+  }
+
+  /* ====================================================
+     네이버 지도 — 폴백 표시
+  ==================================================== */
+  function buildFallbackHTML() {
+    return PLACES.map(p => `
+      <li class="map-fallback__item">
+        <div class="map-pin map-pin--${p.category}" aria-hidden="true">${p.pinNo}</div>
+        <span class="map-fallback__name">${p.name}</span>
+        <span class="tag tag--${p.category}">${CAT_LABEL[p.category]}</span>
+        <span class="map-fallback__address">${p.address}</span>
+      </li>
+    `).join('');
+  }
+
+  function showHeroFallback() {
+    const mapEl  = document.getElementById('hero-map');
+    const fbEl   = document.getElementById('hero-map-fallback');
+    const listEl = document.getElementById('hero-fallback-list');
+    if (mapEl)  { mapEl.style.display = 'none'; }
+    if (fbEl)   { fbEl.classList.add('is-visible'); }
+    if (listEl) { listEl.innerHTML = buildFallbackHTML(); }
+  }
+
+  function showSplitFallback() {
+    const mapEl = document.getElementById('split-map');
+    const fbEl  = document.getElementById('split-map-fallback');
+    if (mapEl) { mapEl.style.display = 'none'; }
+    if (fbEl)  { fbEl.classList.add('is-visible'); }
+  }
+
+  /* ====================================================
+     네이버 지도 — 인증 실패 콜백
+     (SDK가 자동으로 호출)
+  ==================================================== */
+  window.navermap_authFailure = function () {
+    window.__NMAP_FAILED = true;
+    console.error('[NaverMap] 인증 실패. NCP 콘솔에서 웹 서비스 URL과 키 종류를 확인하세요.');
+    showHeroFallback();
+    showSplitFallback();
+  };
+
+  /* ====================================================
+     마커 핀 DOM 생성
+  ==================================================== */
+  function createPinContent(place) {
+    return `<div
+      class="map-pin map-pin--${place.category}"
+      role="img"
+      aria-label="${place.pinNo}번 장소 · ${place.name}"
+      tabindex="0"
+    >${place.pinNo}</div>`;
+  }
+
+  /* ====================================================
+     네이버 지도 초기화
+  ==================================================== */
+  function initNaverMaps() {
+    // SDK 로드 또는 인증 실패
+    if (window.__NMAP_FAILED || !window.naver || !window.naver.maps) {
+      console.warn('[NaverMap] SDK 로드 실패 또는 키 없음. 폴백을 표시합니다.');
+      showHeroFallback();
+      showSplitFallback();
+      return;
+    }
+
+    // 좌표 누락 확인 (geocode.mjs 미실행 상태)
+    const missing = PLACES.filter(p => p.lat === null || p.lng === null);
+    if (missing.length > 0) {
+      console.warn('[NaverMap] 좌표 누락:', missing.map(p => p.name));
+      showHeroFallback();
+      showSplitFallback();
+      return;
+    }
+
+    // ── 히어로 지도 ──
+    const heroMap = new naver.maps.Map('hero-map', {
+      zoom: 15,
+      mapTypeId: naver.maps.MapTypeId.NORMAL
+    });
+    const heroBounds = new naver.maps.LatLngBounds();
+
+    // ── 스플릿 지도 ──
+    const splitMap = new naver.maps.Map('split-map', {
+      zoom: 15,
+      mapTypeId: naver.maps.MapTypeId.NORMAL
+    });
+    const splitBounds = new naver.maps.LatLngBounds();
+
+    PLACES.forEach(place => {
+      const pos = new naver.maps.LatLng(place.lat, place.lng);
+
+      // 히어로 마커
+      const heroMarker = new naver.maps.Marker({
+        position: pos,
+        map: heroMap,
+        icon: {
+          content: createPinContent(place),
+          anchor: new naver.maps.Point(14, 14)
+        },
+        title: place.name
+      });
+      naver.maps.Event.addListener(heroMarker, 'click', () => scrollToCard(place.pinNo));
+      heroBounds.extend(pos);
+
+      // 스플릿 마커
+      const splitMarker = new naver.maps.Marker({
+        position: pos,
+        map: splitMap,
+        icon: {
+          content: createPinContent(place),
+          anchor: new naver.maps.Point(14, 14)
+        },
+        title: place.name
+      });
+      naver.maps.Event.addListener(splitMarker, 'click', () => scrollToCard(place.pinNo));
+      splitBounds.extend(pos);
+    });
+
+    // fitBounds — 전체 마커가 보이도록 자동 프레이밍
+    heroMap.fitBounds(heroBounds,   { top: 50, right: 50, bottom: 50, left: 50 });
+    splitMap.fitBounds(splitBounds, { top: 50, right: 50, bottom: 50, left: 50 });
+  }
+
+  /* ====================================================
+     DOM 준비 후 실행
+  ==================================================== */
+  document.addEventListener('DOMContentLoaded', function () {
+    // 카드 초기 렌더
+    renderCards(PLACES);
+    // 스크롤 페이드 초기화
+    observeScrollFade();
+  });
+
+  // 지도 SDK는 load 이벤트 이후 초기화 (스크립트 로드 완료 보장)
+  /* geocode.mjs가 만든 ./data/places.json의 좌표를 자동 병합 후 지도 초기화.
+     파일이 없으면(지오코딩 전) 인라인 기본값으로 폴백 렌더. */
+  async function bootstrap() {
+    try {
+      const res = await fetch('./data/places.json', { cache: 'no-store' });
+      if (res.ok) {
+        const data = await res.json();
+        if (data && Array.isArray(data.places) && data.places.length) {
+          const byPin = new Map(data.places.map(p => [p.pinNo, p]));
+          PLACES = PLACES.map(p => {
+            const g = byPin.get(p.pinNo);
+            return (g && g.lat != null && g.lng != null)
+              ? { ...p, lat: g.lat, lng: g.lng }
+              : p;
+          });
+          console.info('[NaverMap] data/places.json 좌표 로드 완료');
+        }
+      }
+    } catch (e) {
+      console.info('[NaverMap] data/places.json 없음 — 인라인 기본값 사용(좌표 없으면 폴백).');
+    }
+    initNaverMaps();
+  }
+  window.addEventListener('load', bootstrap);
+</script>
+
+</body>
+</html>
