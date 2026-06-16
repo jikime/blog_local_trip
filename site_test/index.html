@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>동네 탐방 — 서울 여러 동네 로컬 여행 블로그</title>
+  <meta
+    name="description"
+    content="서울의 여러 동네(연희·연남·성수·익선·망원)를 걸으며 기록하는 로컬 여행 블로그. 실제 지도 위에 장소를 핀으로 표시합니다."
+  />
+
+  <!-- 폰트: Pretendard (CDN) — 산세리프 한글 웹폰트 -->
+  <link rel="stylesheet" as="style" crossorigin
+    href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+
+  <!-- 무료 지도: Leaflet (키 불필요) -->
+  <link rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin="" />
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#map-section">본문으로 건너뛰기</a>
+
+  <!-- 헤더 / 네비 -->
+  <header class="site-header">
+    <div class="container">
+      <a class="brand" href="#top">동네 탐방<span class="dot">.</span></a>
+      <nav class="nav-links" aria-label="섹션 이동">
+        <a href="#map-section">지도 · 장소</a>
+        <a href="#articles">동네 이야기</a>
+        <a href="#about">소개</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- 1. 히어로 -->
+    <section class="hero">
+      <div class="container">
+        <p class="eyebrow">Seoul · Local Walks</p>
+        <h1>서울의 여러 동네를 걸으며 기록합니다</h1>
+        <p class="lead">
+          연희·연남·성수·익선·망원 — 서로 다른 구에 흩어진 다섯 동네의
+          카페와 맛집, 골목을 한 페이지에서 지도와 함께 모았어요.
+        </p>
+        <div class="hero-tags">
+          <span class="tag">카페</span>
+          <span class="tag">맛집</span>
+          <span class="tag">시장·공원</span>
+          <span class="tag">한옥 골목</span>
+          <span class="tag">반나절 코스</span>
+        </div>
+
+        <p class="hood-chips-label">추천 동네</p>
+        <div class="hood-chips" id="hood-chips" role="group" aria-label="동네 필터"></div>
+
+        <!-- 컨트롤: 카테고리 필터 + 검색 -->
+        <div class="controls">
+          <div class="filters" id="filters" role="group" aria-label="카테고리 필터"></div>
+          <div class="search-box">
+            <label for="search" class="sr-only" style="position:absolute;left:-9999px;">장소 검색</label>
+            <input id="search" type="search" placeholder="장소명·특징 검색 (예: 소금빵, 스페셜티)" autocomplete="off" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. 지도 + 장소 스플릿뷰 -->
+    <section id="map-section" class="container" aria-label="지도와 장소 목록">
+      <div class="split">
+        <!-- 지도 -->
+        <div class="map-panel">
+          <div id="map" role="application" aria-label="장소 위치 지도"></div>
+          <p class="map-status" id="map-status" role="status" aria-live="polite">
+            무료 지도를 준비하는 중…
+          </p>
+        </div>
+
+        <!-- 장소 리스트 -->
+        <div class="places-col">
+          <div class="places-head">
+            <h2>장소 리스트</h2>
+            <span class="result-count"><span id="result-count">15곳</span></span>
+          </div>
+          <ul class="place-list" id="place-list"></ul>
+        </div>
+      </div>
+
+      <!-- 네이버 키 패널 (PRD 5.6 — 비활성) -->
+      <div class="key-panel">
+        <h3>네이버 지도로 보기 (선택)</h3>
+        <p>
+          네이버 지도 Maps API의 <code>ncpKeyId</code>를 입력하면 네이버 지도로
+          전환할 수 있어요. 같은 장소가 같은 방식으로 핀에 표시돼요.
+        </p>
+        <div class="key-row">
+          <input id="ncp-key" type="text" placeholder="ncpKeyId" disabled />
+          <button class="btn" id="ncp-apply" type="button" disabled>적용</button>
+          <button class="btn" id="ncp-clear" type="button" disabled>키 지우기</button>
+        </div>
+        <p class="key-note">
+          현재 환경에서는 네이버 API 키 입력이 불가능(준비 안 됨)하여 입력란을
+          비활성화했어요. 기본 동작은 키가 필요 없는 무료 지도(Leaflet +
+          OpenStreetMap + Nominatim)로 제공돼요.
+        </p>
+      </div>
+    </section>
+
+    <!-- 3. 동네 아티클 -->
+    <section id="articles" class="articles">
+      <div class="container">
+        <h2 class="section-title">동네 이야기</h2>
+        <p class="section-sub">
+          동네마다 비슷한 수(세 곳)로 균형을 맞췄어요. 글 속 핀 번호를 누르면
+          위 지도에서 해당 장소로 바로 이동해요.
+        </p>
+        <div id="articles-wrap"></div>
+      </div>
+    </section>
+
+    <!-- 4. About -->
+    <section id="about" class="about">
+      <div class="container">
+        <h2 class="section-title">소개</h2>
+        <p class="about-text">
+          <strong>동네 탐방</strong>은 한 사람이 직접 걸은 서울 동네의 기록이에요.
+          음식점·카페·공간·골목을 글과 위치로 남기고, 방문 전 동네 단위로
+          빠르게 둘러볼 수 있게 했어요. 별도 페이지 없이 이 한 페이지 안에서
+          모든 내용을 제공해요.
+        </p>
+        <p class="about-text">
+          주소와 영업 상태는 바뀔 수 있어요. 각 카드에 <strong>최종 확인일</strong>을
+          두었으니 방문 전 다시 확인하는 걸 권해요(콘텐츠 최신성 책임은 작성자에게
+          있어요).
+        </p>
+        <p class="sources">
+          데이터 출처 — 장소: 다이닝코드·식신·대한민국 구석구석·letseoul 등 검색으로
+          확인한 도로명주소(2026-06 기준). 무료 지오코딩: OpenStreetMap Nominatim,
+          타일: OpenStreetMap. 네이버 경로: 네이버 지도 API v3(Geocoder) 가이드.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      © 2026 동네 탐방 — 5개 동네 · 4개 구 · 15곳. 무료 지도로 키 없이 동작해요.
+    </div>
+  </footer>
+
+  <!-- Leaflet JS -->
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""></script>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
